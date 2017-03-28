@@ -87,11 +87,17 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col s12">
+                    <div class="col s6">
                         <div class="progress">
                             <div class="determinate" v-bind:style="'width: ' + commands.inv.percent + '%'"></div>
                         </div>
                         <button class="btn full" v-on:click="doCommand('inv')" v-bind:disabled="disabled">Inventory</button>
+                    </div>
+                    <div class="col s6">
+                        <div class="progress">
+                            <div class="determinate" v-bind:style="'width: ' + commands.stats.percent + '%'"></div>
+                        </div>
+                        <button class="btn full" v-on:click="doCommand('stats')" v-bind:disabled="disabled">Stats</button>
                     </div>
                 </div>
             </div>
@@ -199,6 +205,12 @@
                 },
                 inv: {
                     command: '#!inv',
+                    cooldown: 10000,
+                    lastTime: 0,
+                    percent: 100
+                },
+                stats: {
+                    command: '#!stats',
                     cooldown: 10000,
                     lastTime: 0,
                     percent: 100
