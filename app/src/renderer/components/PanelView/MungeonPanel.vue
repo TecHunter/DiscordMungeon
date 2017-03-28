@@ -1,0 +1,256 @@
+<template>
+    <div class="container full">
+        <div class="row">
+            <div class="col s8">
+            <div class="row"><div class="col s12">
+                    <div class="progress">
+                        <div class="determinate" v-bind:style="'width: ' + commands.pot.percent + '%'"></div>
+                    </div>
+                    <div class="row">
+                    <div class="col s4"><p class="flow-text">Potions</p></div>
+                        <div class="col s2">
+                            <button class="btn full" v-on:click="doCommand('pot', 10)" v-bind:disabled="disabled">x10</button>
+                        </div>
+                        <div class="col s2">
+                            <button class="btn full" v-on:click="doCommand('pot', 100)" v-bind:disabled="disabled">x100</button>
+                        </div>
+                        <div class="col s2">
+                            <button class="btn full" v-on:click="doCommand('pot', 1000)" v-bind:disabled="disabled">x1000</button>
+                        </div>
+                        <div class="col s2">
+                            <button class="btn full" v-on:click="doCommand('pot', 10000)" v-bind:disabled="disabled">x10000</button>
+                        </div>
+                    </div>
+                </div></div>
+                <div class="row"><div class="col s12">
+                    <div class="hljs-workspace" v-html="hljsOutput">
+                </div></div>
+                
+                </div>
+            </div>
+            <div class="col s4">
+                <div class="row">
+                    <div class="col s12">
+                        <div class="progress">
+                            <div class="determinate" v-bind:style="'width: ' + commands.adventure.percent + '%'"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col s6">
+                                <button class="btn full" v-on:click="doCommand('adventure')" v-bind:disabled="commands.adventure.percent < 100 || disabled">Adventure</button>
+                            </div>
+                            <div class="col s6">
+                                <button class="btn full" v-on:click="doCommand('adventure', 1)" v-bind:disabled="commands.adventure.percent < 100 || disabled">Run</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s6">
+                        <div class="progress">
+                            <div class="determinate" v-bind:style="'width: ' + commands.heal.percent + '%'"></div>
+                        </div>
+                        <button class="btn full" v-on:click="doCommand('heal')" v-bind:disabled="commands.heal.percent < 100 || disabled">Heal</button>
+                    </div>
+                    <div class="col s6">
+                        <div class="progress">
+                            <div class="determinate" v-bind:style="'width: ' + commands.pheal.percent + '%'"></div>
+                        </div>
+                        <button class="btn full" v-on:click="doCommand('pheal')" v-bind:disabled="commands.pheal.percent < 100 || disabled">Heal Pet</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s6">
+                        <div class="progress">
+                            <div class="determinate" v-bind:style="'width: ' + commands.mine.percent + '%'"></div>
+                        </div>
+                        <button class="btn full" v-on:click="doCommand('mine')" v-bind:disabled="disabled">Mine</button>
+                    </div>
+                    <div class="col s6">
+                        <div class="progress">
+                            <div class="determinate" v-bind:style="'width: ' + commands.chop.percent + '%'"></div>
+                        </div>
+                        <button class="btn full" v-on:click="doCommand('chop')" v-bind:disabled="disabled">Chop</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s6">
+                        <div class="progress">
+                            <div class="determinate" v-bind:style="'width: ' + commands.forage.percent + '%'"></div>
+                        </div>
+                        <button class="btn full" v-on:click="doCommand('forage')" v-bind:disabled="disabled">Forage</button>
+                    </div>
+                    <div class="col s6">
+                        <div class="progress">
+                            <div class="determinate" v-bind:style="'width: ' + commands.fish.percent + '%'"></div>
+                        </div>
+                        <button class="btn full" v-on:click="doCommand('fish')" v-bind:disabled="disabled">Fish</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s12">
+                        <div class="progress">
+                            <div class="determinate" v-bind:style="'width: ' + commands.inv.percent + '%'"></div>
+                        </div>
+                        <button class="btn full" v-on:click="doCommand('inv')" v-bind:disabled="disabled">Inventory</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+    export default {
+        created() {
+            // Set $route values that are not preset during unit testing
+            if (process.env.NODE_ENV === 'testing') {
+                this.$route = {
+                    name: 'panel',
+                    path: '/panel'
+                };
+            }
+
+            function parseHljs(text) {
+                let reg = new RegExp(/```(.+)\n((?:.|\n|\r)*)\n?```/im);
+                while (reg.test(text)) {
+                    let replaceWith = '';
+                    let matches = text.match(reg);
+                    let language = matches[1];
+                    let code = matches[2];
+                    let res = hljs.highlight(language, code);
+                    replaceWith = res.value;
+                    text = text.replace(reg, `<pre><code>${replaceWith}</code></pre>`);
+                }
+                reg = new RegExp(/`((?:.|\n|\r)*?)`/im);
+                while (reg.test(text)) {
+                    text = text.replace(reg, '<code>$1</code>');
+                }
+                
+                return text;
+            }
+
+            this.bot.on('message', msg => {
+                if (msg.channel.id == this.channel.id && msg.author.id == this.drpg && this.awaitResponse == true) {
+                    let lines = msg.content.split('\n');
+                    if (lines[0].includes(this.bot.user.username)
+                        || lines[1].includes(this.bot.user.username)) {
+                        this.awaitResolve(msg);                            
+                        this.awaitResponse = false;
+                        this.hljsOutput = parseHljs(msg.content);
+                    }
+                }
+            });
+        },
+        data: () => ({
+            bot: window.bot,
+            channel: window.bot.channels.get('296046273868333058'),
+            awaitResponse: false,
+            drpg: '170915625722576896',
+            hljsOutput: '',
+            disabled: false,
+            commands: {
+                adventure: {
+                    command: '#!adv',
+                    cooldown: 14000,
+                    lastTime: 0,
+                    percent: 100
+                },
+                forage: {
+                    command: '#!forage',
+                    cooldown: 300000,
+                    lastTime: 0,
+                    percent: 100
+                },
+                mine: {
+                    command: '#!mine',
+                    cooldown: 300000,
+                    lastTime: 0,
+                    percent: 100
+                },
+                fish: {
+                    command: '#!fish',
+                    cooldown: 300000,
+                    lastTime: 0,
+                    percent: 100
+                },
+                chop: {
+                    command: '#!chop',
+                    cooldown: 300000,
+                    lastTime: 0,
+                    percent: 100
+                },
+                heal: {
+                    command: '#!heal auto',
+                    cooldown: 10000,
+                    lastTime: 0,
+                    percent: 100
+                },
+                pheal: {
+                    command: '#!pheal auto',
+                    cooldown: 10000,
+                    lastTime: 0,
+                    percent: 100
+                },
+                pot: {
+                    command: '#!buy health potion',
+                    cooldown: 10000,
+                    lastTime: 0,
+                    percent: 100
+                },
+                inv: {
+                    command: '#!inv',
+                    cooldown: 10000,
+                    lastTime: 0,
+                    percent: 100
+                }
+            }
+        }),
+        methods: {
+            doCommand(type, extra = '') {
+                this.disabled = true;
+                this.awaitResponse = true;
+                this.commands[type].percent = 0;
+                new Promise((resolve, reject) => {
+                    this.awaitResolve = resolve;
+                }).then(msg => {
+                    this.disabled = false;
+                    this.commands[type].lastTime = msg.createdTimestamp + (this.commands[type].cooldown);                    
+                    let timer = setInterval(() => {
+                        if (this.getProgress(type)) {
+                            clearInterval(timer);
+                        }
+                    }, 100);
+                });
+                this.channel.send(this.commands[type].command + ' ' + extra);
+            },
+            getProgress(type) {
+                let now = Date.now();
+                if (now < this.commands[type].lastTime) {
+                    let diff = this.commands[type].lastTime - now;
+                    this.commands[type].percent = Math.abs(Math.min((diff / this.commands[type].cooldown) * 100) - 100);
+                    return false;
+                } else {
+                    this.commands[type].percent = 100;
+                    return true;
+                }
+            }
+        }
+    };
+</script>
+
+<style scoped>
+    .hljs-workspace {
+        background: rgba(0,0,0,0.075);
+        padding: 5px;
+        border-radius: 5px;
+    }
+
+    p {
+        line-height: 24px;
+    }
+
+    button {
+        text-align: center;
+        padding: 0;
+    }
+</style>
