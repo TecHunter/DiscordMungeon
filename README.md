@@ -20,7 +20,7 @@ Discord Mungeon provides the following services:
 
 ## Requirements
 
-To use Discord Mungeon, you must be able to access your account's token and be in the (http://discord.gg/FDVJuVW)[Discord Mungeon guild].
+To use Discord Mungeon, you must be able to access your account's token and be in the [Discord Mungeon guild](http://discord.gg/FDVJuVW).
 
 The latter is to keep all app usage in the same place, so it's easy to spot abuse.
 
@@ -46,4 +46,4 @@ Your token is stored to your computer's localstorage, and nowhere else. It never
 
 ### I found a bug, or have a suggestion. Where can I report it?
 
-Please report it in the (http://discord.gg/FDVJuVW)[Discord Mungeon guild].
+Please report it in the [Discord Mungeon guild](http://discord.gg/FDVJuVW).
