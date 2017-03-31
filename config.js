@@ -1,11 +1,12 @@
 'use strict';
 
 const path = require('path');
+const packa = require('./package.json');
 
 let config = {
   // Name of electron app
   // Will be used in production builds
-  name: 'Discord Mungeon',
+  name: 'DiscordMungeon-' + packa.version,
 
   // Use ESLint (extends `standard`)
   // Further changes can be made in `.eslintrc.js`

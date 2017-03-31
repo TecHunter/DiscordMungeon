@@ -1,6 +1,6 @@
 {
   "name": "discordmungeon",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A panel for DiscordRPG",
   "scripts": {
     "build": "node tasks/release.js",

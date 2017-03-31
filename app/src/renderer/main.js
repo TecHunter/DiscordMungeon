@@ -11,6 +11,9 @@ import 'materialize-css/bin/materialize.js';
 
 import Hljs from 'highlight.js/lib/index.js';
 import 'highlight.js/styles/default.css';
+import audioHit from './assets/hit.ogg';
+import audioClick from './assets/click.ogg';
+import audioVictory from './assets/victory.ogg';
 
 import Discord from 'discord.js';
 

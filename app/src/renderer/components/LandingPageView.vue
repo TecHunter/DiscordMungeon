@@ -28,10 +28,4 @@
   .main {
     top: 0;
   }
-  
-  html,
-  body {
-    background: radial-gradient( ellipse at center, rgba(255, 255, 255, 0.8) 0%, rgba(229, 229, 229, 0.4) 100%), url('LandingPageView/assets/bg.png');
-    background-size: cover;
-  }
 </style>

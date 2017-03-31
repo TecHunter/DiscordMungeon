@@ -1,5 +1,7 @@
 <template>
     <div class="container full">
+        <a v-on:click="toggleMute" class="muteButton btn-floating btn-large waves-effect waves-light red"><i class="material-icons">{{ muted ? 'volume_off' : 'volume_up' }}</i></a>
+
         <div class="row">
             <div class="col s8">
             <div class="row"><div class="col s12">
@@ -147,83 +149,112 @@
                 }
             });
         },
-        data: () => ({
-            bot: window.bot,
-            channel: window.bot.channels.get('296046273868333058'),
-            awaitResponse: false,
-            drpg: '170915625722576896',
-            hljsOutput: '',
-            disabled: false,
-            commands: {
-                adventure: {
-                    command: '#!adv',
-                    cooldown: 14000,
-                    lastTime: 0,
-                    percent: 100
-                },
-                forage: {
-                    command: '#!forage',
-                    cooldown: 300000,
-                    lastTime: 0,
-                    percent: 100
-                },
-                mine: {
-                    command: '#!mine',
-                    cooldown: 300000,
-                    lastTime: 0,
-                    percent: 100
-                },
-                fish: {
-                    command: '#!fish',
-                    cooldown: 300000,
-                    lastTime: 0,
-                    percent: 100
-                },
-                chop: {
-                    command: '#!chop',
-                    cooldown: 300000,
-                    lastTime: 0,
-                    percent: 100
-                },
-                heal: {
-                    command: '#!heal auto',
-                    cooldown: 10000,
-                    lastTime: 0,
-                    percent: 100
-                },
-                pheal: {
-                    command: '#!pheal auto',
-                    cooldown: 10000,
-                    lastTime: 0,
-                    percent: 100
-                },
-                pot: {
-                    command: '#!buy health potion',
-                    cooldown: 10000,
-                    lastTime: 0,
-                    percent: 100
-                },
-                inv: {
-                    command: '#!inv',
-                    cooldown: 10000,
-                    lastTime: 0,
-                    percent: 100
-                },
-                stats: {
-                    command: '#!stats',
-                    cooldown: 10000,
-                    lastTime: 0,
-                    percent: 100
+        data() {
+            return {
+                muted: false,
+                audioHit: new Audio('audio/hit.ogg'),
+                audioVictory: new Audio('audio/victory.ogg'),
+                audioCooldown: new Audio('audio/click.ogg'),
+                bot: window.bot,
+                channel: window.bot.channels.get('296046273868333058'),
+                awaitResponse: false,
+                drpg: '170915625722576896',
+                hljsOutput: '',
+                disabled: false,
+                commands: {
+                    adventure: {
+                        command: '#!adv',
+                        cooldown: 15000,
+                        lastTime: 0,
+                        percent: 100,
+                        sfx: (msg) => {
+                            let lines = msg.content.split('\n');
+                            if (lines.length == 1) {
+                                this.audioCooldown.play();
+                                this.commands.adventure.lastTime = 0;
+                                this.commands.adventure.percent = 100;
+                            } else {
+                                if (!msg.content.endsWith('Type `#!adventure 1` to run, or `#!adventure 2` to continue.')) {
+                                    this.audioVictory.play();
+                                } else
+                                this.audioHit.play();
+                            }
+                        }
+                    },
+                    forage: {
+                        command: '#!forage',
+                        cooldown: 300000,
+                        lastTime: 0,
+                        percent: 100
+                    },
+                    mine: {
+                        command: '#!mine',
+                        cooldown: 300000,
+                        lastTime: 0,
+                        percent: 100
+                    },
+                    fish: {
+                        command: '#!fish',
+                        cooldown: 300000,
+                        lastTime: 0,
+                        percent: 100
+                    },
+                    chop: {
+                        command: '#!chop',
+                        cooldown: 300000,
+                        lastTime: 0,
+                        percent: 100
+                    },
+                    heal: {
+                        command: '#!heal auto',
+                        cooldown: 10000,
+                        lastTime: 0,
+                        percent: 100
+                    },
+                    pheal: {
+                        command: '#!pheal auto',
+                        cooldown: 10000,
+                        lastTime: 0,
+                        percent: 100
+                    },
+                    pot: {
+                        command: '#!buy health potion',
+                        cooldown: 10000,
+                        lastTime: 0,
+                        percent: 100
+                    },
+                    inv: {
+                        command: '#!inv',
+                        cooldown: 10000,
+                        lastTime: 0,
+                        percent: 100
+                    },
+                    stats: {
+                        command: '#!stats',
+                        cooldown: 10000,
+                        lastTime: 0,
+                        percent: 100
+                    }
                 }
-            }
-        }),
+            };
+        },
         methods: {
+            toggleMute() {
+                this.muted = !this.muted;
+            },
             doCommand(type, extra = '') {
                 this.disabled = true;
                 this.awaitResponse = true;
                 this.commands[type].percent = 0;
                 new Promise((resolve, reject) => {
-                    this.awaitResolve = resolve;
+                    let timer = setTimeout(() => {
+                        reject(new Error('Query expired after 10 seconds'));
+                    }, 10000);
+                    
+                    this.awaitResolve = function(msg) {
+                        clearTimeout(timer);
+                        resolve(msg);
+                    };
                 }).then(msg => {
                     this.disabled = false;
                     this.commands[type].lastTime = msg.createdTimestamp + (this.commands[type].cooldown);                    
@@ -232,8 +263,22 @@
                             clearInterval(timer);
                         }
                     }, 100);
+                    if (!this.muted && this.commands[type].sfx != undefined) {
+                        this.commands[type].sfx(msg);
+                    }
+                }).catch(err => {
+                    this.commands[type].lastTime = 0;
+                    this.commands[type].percent = 100;
+                    this.awaitResolve = undefined;
+                    this.awaitResponse = false;
+                    this.disabled = false;
+                    this.hljsOutput = `An error has occured:<br>${err.message}`;
                 });
-                this.channel.send(this.commands[type].command + ' ' + extra);
+                this.channel.send(this.commands[type].command + ' ' + extra).catch(err => {
+                    this.disabled = false;
+                    this.awaitResponse = false;
+                    this.hljsOutput = `An error has occured:<br>${err.message}`;                    
+                });
             },
             getProgress(type) {
                 let now = Date.now();
@@ -251,6 +296,12 @@
 </script>
 
 <style scoped>
+    .muteButton {
+        position: fixed;
+        top: 5px;
+        left: 5px;
+    }
+
     .hljs-workspace {
         background: rgba(0,0,0,0.075);
         padding: 5px;

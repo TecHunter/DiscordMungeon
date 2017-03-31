@@ -61,7 +61,7 @@
       }
     },
     mounted() {
-      Materialize.updateTextFields();
+      // Materialize.updateTextFields();
     },
     data: () => ({
       token: localStorage.getItem('token'),

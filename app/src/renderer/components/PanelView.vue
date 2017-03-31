@@ -5,7 +5,7 @@
       <p>For best results, maximize this window</p>          
     </header>
     <invalid v-bind:hidden="inGuild"></invalid>
-    <mungeon-panel v-bind:hidden="!inGuild"></mungeon-panel>
+    <mungeon-panel v-bind:hidden="!inGuild" ref="mungeonPanel"></mungeon-panel>
   </div>
 </template>
 
