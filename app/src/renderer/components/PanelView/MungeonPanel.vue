@@ -288,6 +288,9 @@ export default {
             });
         },
         gather() {
+            if (this.channel == undefined)
+                this.channel = window.bot.users.get('170915625722576896');
+
             this.commands.gather.percent = 0;
             this.disabled = true;
             let lines = [];
@@ -333,6 +336,9 @@ export default {
             });
         },
         doCustom() {
+            if (this.channel == undefined)
+                this.channel = window.bot.users.get('170915625722576896');
+
             if (this.customCommand != '') {
                 if (!this.customCommand.startsWith('#!'))
                     this.customCommand = '#!' + this.customCommand;
@@ -348,6 +354,9 @@ export default {
             this.doCommand('shop', this.buyItem + ' ' + this.buyQuantity);
         },
         doCommand(type, extra = '') {
+            if (this.channel == undefined)
+                this.channel = window.bot.users.get('170915625722576896');
+
             this.commands[type].percent = 0;
             this.awaitMessage().then(msg => {
                 if (!msg.cooldown)
