@@ -166,6 +166,7 @@ export default {
         }
 
         this.bot.on('message', msg => {
+            if (msg.guild == undefined && msg.author.id == this.drpg) console.log(msg.content);
             if (msg.guild == undefined && msg.author.id == this.drpg && this.awaitResponse == true) {
                 for (let message of this.cooldownMessages) {
                     if (message.test(msg.content)) {
@@ -173,11 +174,13 @@ export default {
                         break;
                     }
                 }
+
+                msg.acknowledge();
+
                 this.awaitResolve(msg);
                 this.awaitResponse = false;
                 if (this.automateOutput)
                     this.hljsOutput = parseHljs(msg.content);
-
 
             }
         });
@@ -347,7 +350,6 @@ export default {
         doCommand(type, extra = '') {
             this.commands[type].percent = 0;
             this.awaitMessage().then(msg => {
-                console.log(msg.cooldown);
                 if (!msg.cooldown)
                     this.commands[type].lastTime = msg.createdTimestamp +
                         this.commands[type].cooldown;

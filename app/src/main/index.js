@@ -3,6 +3,8 @@
 import { app, BrowserWindow, ipcMain} from 'electron';
 import {autoUpdater} from 'electron-updater';
 import log from 'electron-log';
+if (process.env.NODE_ENV !== 'development')
+  require('electron-debug')({ showDevTools: false });
 
 autoUpdater.logger = log;
 autoUpdater.logger.transports.file.level = 'info';
@@ -83,6 +85,10 @@ ipcMain.on('loopBack', (event, arg) => {
   updateHeader(arg);
 });
 
+ipcMain.on('openDevTools', (event) => {
+  event.returnValue = true;
+  mainWindow.webContents.openDevTools();
+});
 
 autoUpdater.on('update-downloaded', (event, info) => {
   if (process.env.NODE_ENV != 'development') 

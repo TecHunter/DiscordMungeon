@@ -15,6 +15,8 @@
                 v-on:click='toggleMaximize'><i class="material-icons">{{!fullscreen ? 'fullscreen' : 'fullscreen_exit'}}</i></button>
         <button class='status-bar-button right'
                 v-on:click='minimize'><i class="material-icons">minimize</i></button>
+        <button class='status-bar-button right'
+                v-on:click='devTools'><i class="material-icons">bug_report</i></button>
     </div>
 </template>
 
@@ -34,7 +36,7 @@ export default {
             setTimeout(() => {
                 this.headerInfo = '';
                 this.updateNotFound = true;
-            }, 5000)
+            }, 5000);
         });
 
         ipcRenderer.on('updateReady', () => {
@@ -49,7 +51,7 @@ export default {
         fullscreen: false,
         updateReady: false,
         updateNotFound: false,
-        version: packa.version,
+        version: packa.version
 
     }),
     methods: {
@@ -61,6 +63,9 @@ export default {
         },
         minimize() {
             ipcRenderer.sendSync('minimize');
+        },
+        devTools() {
+            ipcRenderer.sendSync('openDevTools');
         },
         updateCheck() {
             this.updateNotFound = false;

@@ -4,28 +4,22 @@
       <h1 style="margin-bottom: 0px; padding-bottom: 0px;">Mungeon Panel</h1>
       <p>For best results, maximize this window</p>
     </header>
-    <invalid v-bind:hidden="inGuild"></invalid>
-    <mungeon-panel v-bind:hidden="!inGuild"
-                   ref="mungeonPanel"></mungeon-panel>
+    <mungeon-panel ref="mungeonPanel"></mungeon-panel>
   </div>
 </template>
 
 <script>
-import Invalid from './PanelView/Invalid';
 import MungeonPanel from './PanelView/MungeonPanel';
 export default {
   components: {
-    Invalid, MungeonPanel
+    MungeonPanel
   },
   name: 'panel',
   created() {
     if (window.bot.readyAt == null) {
       router.push('/');
     }
-  },
-  data: () => ({
-    inGuild: window.bot.guilds.get('296046067420758017') != undefined
-  })
+  }
 };
 </script>
 
