@@ -1,0 +1,20 @@
+{
+  "name": "discordmungeon-vue",
+  "version": "0.0.0",
+  "description": "A panel for Discord Dungeon",
+  "main": "./dist/main.js",
+  "dependencies": {
+    "bluebird": "^3.5.0",
+    "discord.js": "^11.0.0",
+    "highlight.js": "^9.10.0",
+    "jquery": "^3.2.1",
+    "materialize-css": "^0.98.1",
+    "vue": "^2.1.10",
+    "vue-electron": "^1.0.6",
+    "vue-resource": "^1.0.3",
+    "vue-router": "^2.1.2",
+    "vuex": "^2.1.1"
+  },
+  "devDependencies": {},
+  "author": "stupid cat <kirkbenm@gmail.com>"
+}
