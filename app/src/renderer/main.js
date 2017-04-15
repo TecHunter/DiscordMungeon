@@ -33,6 +33,11 @@ window.hljs = Hljs;
 window.bot = new Discord.Client();
 window.Promise = bluebird;
 window.ipcRenderer = ipcRenderer;
+
+ipcRenderer.on('message', function (event, text) {
+  alert(text);
+});
+
 /* eslint-disable no-new */
 new Vue({
   router,

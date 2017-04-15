@@ -1,6 +1,6 @@
 {
   "name": "discordmungeon",
-  "version": "1.0.2",
+  "version": "1.0.7",
   "description": "A DiscordRPG Panel",
   "scripts": {
     "build": "npm run pack && build",
@@ -20,6 +20,7 @@
     "productName": "DiscordMungeon",
     "appId": "me.stupidcat.discordmungeon",
     "category": "public.app-category.tools",
+    "artifactName": "adasdsadsdsa.${ext}",
     "dmg": {
       "contents": [
         {
@@ -40,17 +41,33 @@
       "node_modules/",
       "package.json"
     ],
+    "nsis": {
+      "artifactName": "Aasfdoasufbuasofusoa.${ext}"
+    },
+    "nsisWeb": {
+      "artifactName": "sdsaofbasoifbasof.${ext}"
+    },
     "mac": {
       "icon": "app/icons/icon.icns"
-    },
-    "win": {
-      "icon": "app/icons/mungeon.ico"
     },
     "linux": {
       "target": [
         "AppImage"
       ]
-    }
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "app/icons/mungeon.ico",
+      "publisherName": "ratismal",
+      "publish": [
+        "github"
+      ]
+    },
+    "publish": [
+      "github"
+    ]
   },
   "author": "stupid cat <kirkbenm@gmail.com>",
   "license": "MIT",
@@ -106,5 +123,6 @@
     "webpack": "^2.2.1",
     "webpack-dev-server": "^2.3.0"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "repository": "https://github.com/Ratismal/DiscordMungeon"
 }

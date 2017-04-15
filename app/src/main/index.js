@@ -1,6 +1,12 @@
 'use strict';
 
-import { app, BrowserWindow, ipcMain, autoUpdater } from 'electron';
+import { app, BrowserWindow, ipcMain} from 'electron';
+import {autoUpdater} from 'electron-updater';
+import log from 'electron-log';
+
+autoUpdater.logger = log;
+autoUpdater.logger.transports.file.level = 'info';
+log.info('starting');
 
 let mainWindow;
 const winURL = process.env.NODE_ENV === 'development'
@@ -27,6 +33,27 @@ function createWindow() {
   console.log('mainWindow opened');
 }
 
+function sendStatusToWindow(text) {
+  log.info(text);
+  mainWindow.webContents.send('message', text);
+}
+
+function updateHeader(text) {
+  log.info(text);
+  mainWindow.webContents.send('updateHeader', text);
+}
+
+ipcMain.on('checkUpdates', (event, arg) => {
+  event.returnValue = true;
+  if (process.env.NODE_ENV !== 'development')
+    autoUpdater.checkForUpdates();
+});
+
+ipcMain.on('performUpdate', (event) => {
+  event.returnValue = true;
+  autoUpdater.quitAndInstall();
+});
+
 ipcMain.on('isMaximized', (event, arg) => {
   event.returnValue = mainWindow.isMaximized();
 });
@@ -51,7 +78,43 @@ ipcMain.on('close', (event, arg) => {
   app.quit();
 });
 
-app.on('ready', createWindow);
+ipcMain.on('loopBack', (event, arg) => {
+  event.returnValue = true;
+  updateHeader(arg);
+});
+
+
+autoUpdater.on('update-downloaded', (event, info) => {
+  if (process.env.NODE_ENV != 'development') 
+    mainWindow.webContents.send('updateReady');
+});
+
+autoUpdater.on('checking-for-update', () => {
+  updateHeader('Checking for updates. . .');
+});
+autoUpdater.on('update-available', (ev, info) => {
+  updateHeader('Found an update.');
+});
+autoUpdater.on('update-not-available', (ev, info) => {
+  mainWindow.webContents.send('updateNotFound');
+});
+
+autoUpdater.on('error', (ev, err) => {
+  sendStatusToWindow('Error in auto-updater.\n\n' + err + '\n' + err.message + '\n' + err.stack);
+});
+
+autoUpdater.on('download-progress', (progress) => {
+  updateHeader(`Downloading: ${progress.percent}%`);
+});
+
+
+app.on('ready', function() {
+  createWindow();
+  setTimeout(function() {
+    if (process.env.NODE_ENV !== 'development')
+      autoUpdater.checkForUpdates();
+  }, 5000);
+});
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
@@ -64,12 +127,3 @@ app.on('activate', () => {
     createWindow();
   }
 });
-
-autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName, releaseDate, updateURL) => {
-  autoUpdater.quitAndInstall();
-});
-
-if (process.env.NODE_ENV != 'development') {
-  autoUpdater.setFeedURL('https://discordmungeon.herokuapp.com/feed/channel/all.atom');
-  autoUpdater.checkForUpdates();
-}

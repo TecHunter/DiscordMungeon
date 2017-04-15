@@ -21,6 +21,7 @@ export default {
   components: { MainHeading },
   store
 };
+
 </script>
 
 <style>

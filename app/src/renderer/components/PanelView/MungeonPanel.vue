@@ -394,7 +394,7 @@ export default {
 <style scoped>
 .muteButton {
     position: fixed;
-    top: 5px;
+    top: 61px;
     left: 5px;
 }
 
