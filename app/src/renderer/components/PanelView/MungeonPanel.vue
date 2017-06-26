@@ -1,42 +1,34 @@
 <template>
-    <div class="container full"
-         style="padding-bottom: 0; margin-bottom: 0">
-        <a v-on:click="toggleMute"
-           class="muteButton btn-floating btn-large waves-effect waves-light red"><i class="material-icons">{{ muted ? 'volume_off' : 'volume_up' }}</i></a>
+    <div class="container full" style="padding-bottom: 0; margin-bottom: 0">
+        <a v-on:click="toggleMute" class="muteButton btn-floating btn-large waves-effect waves-light red">
+            <i class="material-icons">{{ muted ? 'volume_off' : 'volume_up' }}</i>
+        </a>
     
         <div class="row">
             <div class="col s8">
                 <div class="row">
                     <div class="col s12">
                         <div class="progress">
-                            <div class="determinate"
-                                 v-bind:style="'width: ' + commands.shop.percent + '%'"></div>
+                            <div class="determinate" v-bind:style="'width: ' + commands.shop.percent + '%'"></div>
                         </div>
                         <div class="row">
                             <div class="col s4">
-                                <button class="btn full"
-                                        v-on:click="doShop()"
-                                        v-bind:disabled="commands.shop.percent < 100 || disabled">Buy</button>
+                                <button class="btn full" v-on:click="doShop()" v-bind:disabled="commands.shop.percent < 100 || disabled">Buy</button>
                             </div>
                             <div class="col s6 input-field">
                                 <label for="buyItem">Item</label>
-                                <input type="text"
-                                       id="buyItem"
-                                       v-model="buyItem">
+                                <input type="text" id="buyItem" v-model="buyItem">
                             </div>
                             <div class="col s2 input-field">
                                 <label for="buyQuantity">Quantity</label>
-                                <input type="number"
-                                       id="buyQuantity"
-                                       v-model="buyQuantity">
+                                <input type="number" id="buyQuantity" v-model="buyQuantity">
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col s12">
-                        <div class="hljs-workspace"
-                             v-html="hljsOutput">
+                        <div class="hljs-workspace" v-html="hljsOutput">
                         </div>
                     </div>
     
@@ -46,19 +38,14 @@
                 <div class="row">
                     <div class="col s12">
                         <div class="progress">
-                            <div class="determinate"
-                                 v-bind:style="'width: ' + commands.adventure.percent + '%'"></div>
+                            <div class="determinate" v-bind:style="'width: ' + commands.adventure.percent + '%'"></div>
                         </div>
                         <div class="row">
                             <div class="col s6">
-                                <button class="btn full"
-                                        v-on:click="doCommand('adventure')"
-                                        v-bind:disabled="commands.adventure.percent < 100 || disabled">Adventure</button>
+                                <button class="btn full" v-on:click="doCommand('adventure')" v-bind:disabled="commands.adventure.percent < 100 || disabled">Adventure</button>
                             </div>
                             <div class="col s6">
-                                <button class="btn full"
-                                        v-on:click="doCommand('adventure', 1)"
-                                        v-bind:disabled="commands.adventure.percent < 100 || disabled">Run</button>
+                                <button class="btn full" v-on:click="doCommand('adventure', 1)" v-bind:disabled="commands.adventure.percent < 100 || disabled">Run</button>
                             </div>
                         </div>
                     </div>
@@ -66,66 +53,45 @@
                 <div class="row">
                     <div class="col s6">
                         <div class="progress">
-                            <div class="determinate"
-                                 v-bind:style="'width: ' + commands.heal.percent + '%'"></div>
+                            <div class="determinate" v-bind:style="'width: ' + commands.heal.percent + '%'"></div>
                         </div>
-                        <button class="btn full"
-                                v-on:click="doCommand('heal')"
-                                v-bind:disabled="commands.heal.percent < 100 || disabled">Heal</button>
+                        <button class="btn full" v-on:click="doCommand('heal')" v-bind:disabled="commands.heal.percent < 100 || disabled">Heal</button>
                     </div>
                     <div class="col s6">
                         <div class="progress">
-                            <div class="determinate"
-                                 v-bind:style="'width: ' + commands.pheal.percent + '%'"></div>
+                            <div class="determinate" v-bind:style="'width: ' + commands.pheal.percent + '%'"></div>
                         </div>
-                        <button class="btn full"
-                                v-on:click="doCommand('pheal')"
-                                v-bind:disabled="commands.pheal.percent < 100 || disabled">Heal Pet</button>
+                        <button class="btn full" v-on:click="doCommand('pheal')" v-bind:disabled="commands.pheal.percent < 100 || disabled">Heal Pet</button>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col s12">
                         <div class="progress">
-                            <div class="determinate"
-                                 v-bind:style="'width: ' + commands.gather.percent + '%'"></div>
+                            <div class="determinate" v-bind:style="'width: ' + commands.gather.percent + '%'"></div>
                         </div>
-                        <button class="btn full"
-                                v-on:click="gather"
-                                v-bind:disabled="disabled">gather</button>
+                        <button class="btn full" v-on:click="gather" v-bind:disabled="disabled">gather</button>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col s6">
                         <div class="progress">
-                            <div class="determinate"
-                                 v-bind:style="'width: ' + commands.inv.percent + '%'"></div>
+                            <div class="determinate" v-bind:style="'width: ' + commands.inv.percent + '%'"></div>
                         </div>
-                        <button class="btn full"
-                                v-on:click="doCommand('inv')"
-                                v-bind:disabled="disabled">Inventory</button>
+                        <button class="btn full" v-on:click="doCommand('inv')" v-bind:disabled="disabled">Inventory</button>
                     </div>
                     <div class="col s6">
                         <div class="progress">
-                            <div class="determinate"
-                                 v-bind:style="'width: ' + commands.stats.percent + '%'"></div>
+                            <div class="determinate" v-bind:style="'width: ' + commands.stats.percent + '%'"></div>
                         </div>
-                        <button class="btn full"
-                                v-on:click="doCommand('stats')"
-                                v-bind:disabled="disabled">Stats</button>
+                        <button class="btn full" v-on:click="doCommand('stats')" v-bind:disabled="disabled">Stats</button>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col s12">
                         <div class="file-field input-field">
-                            <input v-on:click="doCustom"
-                                   type="button"
-                                   class="btn"
-                                   value=">"
-                                   v-bind:disabled="disabled">
+                            <input v-on:click="doCustom" type="button" class="btn" value=">" v-bind:disabled="disabled">
                             <div class="file-path-wrapper">
-                                <input type="text"
-                                       placeholder="Command"
-                                       v-model="customCommand">
+                                <input type="text" placeholder="Command" v-model="customCommand">
                             </div>
                         </div>
                     </div>
@@ -146,22 +112,51 @@ export default {
             };
         }
 
-        function parseHljs(text) {
-            let reg = new RegExp(/```(.+)\n((?:.|\n|\r)*)\n?```/im);
-            while (reg.test(text)) {
-                let replaceWith = '';
-                let matches = text.match(reg);
-                let language = matches[1];
-                let code = matches[2];
-                let res = hljs.highlight(language, code);
-                replaceWith = res.value;
-                text = text.replace(reg, `<pre><code>${replaceWith}</code></pre>`);
+        function parseHljs(text, embeds) {
+            if (!text && embeds.length > 0) {
+                text = '';
+                let embed = embeds[0];
+                console.log(embed);
+                if (embed.author && embed.author.name) {
+                    let icon = '';
+                    if (embed.author.iconURL)
+                        icon = `<img src='${embed.author.iconURL}' class='embed-icon'/>`;
+                    text += `<span class='embed-title'>${icon}${embed.author.name}</span>`;
+                }
+                if (embed.content) text += `<span class='embed-content'>${embed.content}</span>`;
+                if (embed.fields) {
+                    text += `<div class='embed-fields'>`;
+                    for (const field of embed.fields) {
+                        text += `<div class='embed-field'>`;
+                        text += `<span class='embed-title'>${field.name}</span>`;
+                        text += `<span class='embed-content'>${field.value}</span>`;
+                        text += `</div>`;
+                    }
+                    text += `</div>`;
+                }
+                if (embed.footer && embed.footer.text) {
+                    let icon = '';
+                    if (embed.footer.iconURL)
+                        icon = `<img src='${embed.footer.iconURL}' class='embed-icon'/>`;
+                    text += `<span class='embed-footer'>${icon}${embed.footer.text}</span>`;
+                }
+                text = text.replace(/\n/g, '<br>');
+            } else {
+                let reg = new RegExp(/```(.+)\n((?:.|\n|\r)*)\n?```/im);
+                while (reg.test(text)) {
+                    let replaceWith = '';
+                    let matches = text.match(reg);
+                    let language = matches[1];
+                    let code = matches[2];
+                    let res = hljs.highlight(language, code);
+                    replaceWith = res.value;
+                    text = text.replace(reg, `<pre><code>${replaceWith}</code></pre>`);
+                }
+                reg = new RegExp(/`((?:.|\n|\r)*?)`/im);
+                while (reg.test(text)) {
+                    text = text.replace(reg, '<code>$1</code>');
+                }
             }
-            reg = new RegExp(/`((?:.|\n|\r)*?)`/im);
-            while (reg.test(text)) {
-                text = text.replace(reg, '<code>$1</code>');
-            }
-
             return text;
         }
 
@@ -180,7 +175,7 @@ export default {
                 this.awaitResolve(msg);
                 this.awaitResponse = false;
                 if (this.automateOutput)
-                    this.hljsOutput = parseHljs(msg.content);
+                    this.hljsOutput = parseHljs(msg.content, msg.embeds);
 
             }
         });
@@ -415,6 +410,11 @@ export default {
     border-radius: 5px;
 }
 
+.hljs-workspace .embed-title {
+    font-size: 3em;
+    font-family: 'Muli', sans-serif;
+}
+
 p {
     line-height: 24px;
 }
@@ -431,5 +431,41 @@ input::-webkit-input-placeholder {
 input,
 .input-field {
     margin: 0
+}
+</style>
+
+<style>
+.hljs-workspace .embed-title {
+    display: block;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.hljs-workspace .embed-fields {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.hljs-workspace .embed-field {
+    flex-basis: 33%;
+    margin: 5px 0;
+}
+
+.hljs-workspace .embed-content {
+    display: block;
+}
+
+.hljs-workspace .embed-footer {
+    display: block;
+    font-size: 0.9em;
+}
+
+.hljs-workspace .embed-icon {
+    height: 25px;
+    width: 25px;
+    vertical-align: middle;
+    margin: 5px;
+    border-radius: 100px;
 }
 </style>

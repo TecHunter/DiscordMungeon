@@ -1,0 +1,1 @@
+sudo docker run --rm -ti -v /Windows/Users/cat/drive/JS/discordmungeon:/project -v discordmungeon-node-modules:/project/node_modules -v ~/.electron:/root/.electron electronuserland/electron-builder:wine
