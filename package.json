@@ -3,10 +3,11 @@
   "version": "1.0.11",
   "description": "A DiscordRPG Panel",
   "scripts": {
-    "build": "npm run pack && build --win --linux --publish onTagOrDraft",
+    "build": "npm run pack && build",
     "build:dir": "npm run pack && build --dir",
     "build:win": "npm run pack && electron-builder --win",
     "build:linux": "npm run pack && build --linux",
+    "release": "./token.sh && npm run pack && build --win --linux --publish onTagOrDraft",
     "dev": "node tasks/runner.js",
     "e2e": "npm run pack && mocha test/e2e",
     "lint": "eslint --ext .js,.vue -f ./node_modules/eslint-friendly-formatter app test",
