@@ -43,8 +43,7 @@
       "package.json"
     ],
     "nsis": {
-      "artifactName": "${name}-setup-${version}.${ext}",
-      "oneClick": true
+      "artifactName": "${name}-setup-${version}.${ext}"
     },
     "mac": {
       "icon": "app/icons/icon.icns"
@@ -91,7 +90,7 @@
     "del": "^2.2.1",
     "devtron": "^1.1.0",
     "electron": "^1.3.1",
-    "electron-builder": "^16.7.1",
+    "electron-builder": "16.7.1",
     "electron-debug": "^1.1.0",
     "electron-devtools-installer": "^2.0.1",
     "electron-rebuild": "^1.1.3",
