@@ -3,7 +3,7 @@
   "version": "1.0.11",
   "description": "A DiscordRPG Panel",
   "scripts": {
-    "build": "npm run pack && build --win --linux --publish",
+    "build": "npm run pack && build --win --linux --publish onTagOrDraft",
     "build:dir": "npm run pack && build --dir",
     "build:win": "npm run pack && electron-builder --win",
     "build:linux": "npm run pack && build --linux",
