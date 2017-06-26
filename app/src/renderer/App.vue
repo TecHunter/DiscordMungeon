@@ -1,8 +1,6 @@
 <template>
   <div class="container">
-    <div id="#app"
-         class='row'
-         style='margin-bottom: 0'>
+    <div id="#app" class='row' style='margin-bottom: 0'>
       <div class='background'></div>
   
       <main-heading></main-heading>
@@ -15,7 +13,7 @@
 
 <script>
 import store from 'renderer/vuex/store';
-import MainHeading from 'renderer/components/Mainheading';
+import MainHeading from 'renderer/components/MainHeading';
 
 export default {
   components: { MainHeading },
